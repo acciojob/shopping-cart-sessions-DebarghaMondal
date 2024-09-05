@@ -1,5 +1,3 @@
-// This is the boilerplate code given for you
-// You can modify this code
 // Product data
 const products = [
   { id: 1, name: "Product 1", price: 10 },
@@ -12,7 +10,8 @@ const products = [
 // DOM elements
 const productList = document.getElementById("product-list");
 const cartList = document.getElementById("cart-list");
-const clearCartBtn = document.getElementById("clear-cart-btn")
+const clearCartBtn = document.getElementById("clear-cart-btn");
+
 // Render product list
 function renderProducts() {
   products.forEach((product) => {
@@ -24,55 +23,54 @@ function renderProducts() {
 
 // Render cart list
 function renderCart() {
-	const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-	cartList.innerHTML = '';
+  const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+  cartList.innerHTML = ''; // Clear existing cart list
 
-	cart.forEach((item) => {
-		const product = products.find((p) => p.id === item.id);
-		if(product){
-			const li = document.createElement("i");
-			li.innerHTML = `${product.name} - $${product.price}`;
-			cartList.appendChild(li);
-		}
-	})
+  cart.forEach((item) => {
+    const product = products.find((p) => p.id === item.id);
+    if (product) {
+      const li = document.createElement("li");
+      li.innerHTML = `${product.name} - $${product.price}`;
+      cartList.appendChild(li);
+    }
+  });
 }
 
 // Add item to cart
 function addToCart(productId) {
-	const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-	const productExists = cart.some((item) => item.id === productId);
+  const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+  const productExists = cart.some((item) => item.id === productId);
 
-	if(!productExists){
-		cart.push({ id : productId });
-		sessionStorage.setItem("cart", JSON.stringify(cart));
-		renderCart();
-	}
+  if (!productExists) {
+    cart.push({ id: productId });
+    sessionStorage.setItem("cart", JSON.stringify(cart));
+    renderCart();
+  }
 }
 
 // Remove item from cart
 function removeFromCart(productId) {
-	let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-	cart = cart.filter((item) => item.id !== productId);
-	sessionStorage.setItem("cart", JSON.stringify(cart));
-	renderCart();
+  let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+  cart = cart.filter((item) => item.id !== productId);
+  sessionStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
 }
 
 // Clear cart
 function clearCart() {
-	sessionStorage.removeItem("cart");
-	renderCart();
+  sessionStorage.removeItem("cart");
+  renderCart();
 }
 
 // Event listeners
-
 document.addEventListener("click", (event) => {
-	if(event.target.classList.contains("add-to-cart-btn")){
-		const productId = parseInt(event.target.getAttribute("data-id"), 10);
-		addToCart(productId);
-	}
-})
+  if (event.target.classList.contains("add-to-cart-btn")) {
+    const productId = parseInt(event.target.getAttribute("data-id"), 10);
+    addToCart(productId);
+  }
+});
 
-clearCartBtn.addEventListener("click", clearCart)
+clearCartBtn.addEventListener("click", clearCart);
 
 // Initial render
 renderProducts();
