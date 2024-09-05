@@ -39,15 +39,8 @@ function addToCart(productId) {
   const product = products.find((p) => p.id === productId);
 
   if (product) {
-    const itemIndex = cart.findIndex((item) => item.id === productId);
-
-    if (itemIndex !== -1) {
-      // Update the existing item
-      cart[itemIndex] = product;
-    } else {
-      // Add the new item
-      cart.push(product);
-    }
+    // Add the new item
+    cart.push(product);
 
     sessionStorage.setItem("cart", JSON.stringify(cart));
     renderCart();
