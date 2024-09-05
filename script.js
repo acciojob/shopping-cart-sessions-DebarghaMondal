@@ -27,33 +27,31 @@ function renderCart() {
   cartList.innerHTML = ''; // Clear existing cart list
 
   cart.forEach((item) => {
-    const product = products.find((p) => p.id === item.id);
-    if (product) {
-      const li = document.createElement("li");
-      li.innerHTML = `${product.name} - $${product.price}`;
-      cartList.appendChild(li);
-    }
+    const li = document.createElement("li");
+    li.innerHTML = `${item.name} - $${item.price}`;
+    cartList.appendChild(li);
   });
 }
 
 // Add item to cart
 function addToCart(productId) {
   const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-  const productExists = cart.some((item) => item.id === productId);
+  const product = products.find((p) => p.id === productId);
 
-  if (!productExists) {
-    cart.push({ id: productId });
+  if (product) {
+    const itemIndex = cart.findIndex((item) => item.id === productId);
+
+    if (itemIndex !== -1) {
+      // Update the existing item
+      cart[itemIndex] = product;
+    } else {
+      // Add the new item
+      cart.push(product);
+    }
+
     sessionStorage.setItem("cart", JSON.stringify(cart));
     renderCart();
   }
-}
-
-// Remove item from cart
-function removeFromCart(productId) {
-  let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-  cart = cart.filter((item) => item.id !== productId);
-  sessionStorage.setItem("cart", JSON.stringify(cart));
-  renderCart();
 }
 
 // Clear cart
